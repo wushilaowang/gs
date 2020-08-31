@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{09136E7D-3E84-4803-A511-21C57273C850}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>gswmgzback</RootNamespace>
+    <AssemblyName>甘肃文明工作后台</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>E:\GSwmgzCore\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DCA180341ED7225358BDB1B2AFC92D67B7F0BF7E</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>gswmgzback_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="addUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="addUser.Designer.cs">
+      <DependentUpon>addUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChangeUserPermission.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeUserPermission.Designer.cs">
+      <DependentUpon>ChangeUserPermission.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CONSTANTDEFINE.cs" />
+    <Compile Include="CreateQuestionnaire.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateQuestionnaire.Designer.cs">
+      <DependentUpon>CreateQuestionnaire.cs</DependentUpon>
+    </Compile>
+    <Compile Include="disposeAll.cs" />
+    <Compile Include="DistrictTb.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HttpGet.cs" />
+    <Compile Include="LoaderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoaderForm.Designer.cs">
+      <DependentUpon>LoaderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoadingHelper.cs" />
+    <Compile Include="LogIn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogIn.Designer.cs">
+      <DependentUpon>LogIn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MD5.cs" />
+    <Compile Include="MessageFilter.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResultShow.Designer.cs">
+      <DependentUpon>ResultShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetQuestionnaireNumber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetQuestionnaireNumber.Designer.cs">
+      <DependentUpon>SetQuestionnaireNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowHardwareAuthorization.cs" />
+    <Compile Include="StartAppraisal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartAppraisal.Designer.cs">
+      <DependentUpon>StartAppraisal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartFinish.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartFinish.Designer.cs">
+      <DependentUpon>StartFinish.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartSetCardContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartSetCardContent.Designer.cs">
+      <DependentUpon>StartSetCardContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartSetDistrictCardNumber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartSetDistrictCardNumber.Designer.cs">
+      <DependentUpon>StartSetDistrictCardNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartSetUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartSetUser.Designer.cs">
+      <DependentUpon>StartSetUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartSetUsrPermission.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartSetUsrPermission.Designer.cs">
+      <DependentUpon>StartSetUsrPermission.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SumScoreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SumScoreForm.Designer.cs">
+      <DependentUpon>SumScoreForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserTypeEnum.cs" />
+    <EmbeddedResource Include="addUser.resx">
+      <DependentUpon>addUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeUserPermission.resx">
+      <DependentUpon>ChangeUserPermission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateQuestionnaire.resx">
+      <DependentUpon>CreateQuestionnaire.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoaderForm.resx">
+      <DependentUpon>LoaderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogIn.resx">
+      <DependentUpon>LogIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="ResultShow.resx">
+      <DependentUpon>ResultShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetQuestionnaireNumber.resx">
+      <DependentUpon>SetQuestionnaireNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartAppraisal.resx">
+      <DependentUpon>StartAppraisal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartFinish.resx">
+      <DependentUpon>StartFinish.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartSetCardContent.resx">
+      <DependentUpon>StartSetCardContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartSetDistrictCardNumber.resx">
+      <DependentUpon>StartSetDistrictCardNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartSetUser.resx">
+      <DependentUpon>StartSetUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartSetUsrPermission.resx">
+      <DependentUpon>StartSetUsrPermission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SumScoreForm.resx">
+      <DependentUpon>SumScoreForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="gswmgzback_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\UserTypeEnum.datasource" />
+    <None Include="Properties\DataSources\UserTypeEnum.UsrTypeE.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="EnvDTE">
+      <Guid>{80CC9F66-E7D8-4DDD-85B6-D9E6CD0E93E2}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loading2.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loading.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
