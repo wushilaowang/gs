@@ -18,7 +18,7 @@
           <el-form-item label="密码" prop="password">
             <el-input v-model="form.password" placeholder="请输入密码"></el-input>
           </el-form-item>
-          <el-form-item label="行政区划代码" prop="districtCode">
+          <el-form-item label="行政区划代码1" prop="districtCode">
             <el-input v-model.number="form.districtCode" placeholder="请输入行政区划代码" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="测评等级">
