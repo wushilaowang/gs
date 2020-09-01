@@ -18,7 +18,23 @@
           <el-form-item label="密码" prop="password">
             <el-input v-model="form.password" placeholder="请输入密码"></el-input>
           </el-form-item>
-          <el-form-item label="行政区划代码1" prop="districtCode">
+          <el-form-item label="测评类型">
+            <el-dropdown @command="handleDropdownChose">
+              <span>
+                {{form.entrance}}<i class="el-icon-arrow-down"></i>
+              </span>
+              <el-dropdown-menu>
+                <el-dropdown-item command="文明村镇">文明村镇</el-dropdown-item>
+                <el-dropdown-item command="文明校园">文明校园</el-dropdown-item>
+                <el-dropdown-item command="少年宫">少年宫</el-dropdown-item>
+                <el-dropdown-item command="文明社区">文明社区</el-dropdown-item>
+                <el-dropdown-item command="文明单位">文明单位</el-dropdown-item>
+                <el-dropdown-item command="未成年人思想道德建设">未成年人思想道德建设</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
+          </el-form-item>
+          <!-- <el-form-item label="行政区划代码" prop="districtCode">
             <el-input v-model.number="form.districtCode" placeholder="请输入行政区划代码" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="测评等级">
@@ -32,7 +48,7 @@
               <el-radio label="0">地级</el-radio>
               <el-radio label="1">县级</el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button @click="login('form')">登陆</el-button>
           </el-form-item>
@@ -81,14 +97,14 @@
                form: { 
                     account: "admin", 
                     password: "admin", 
-                    districtCode: "610103", 
-                    entrance: "全国测评", 
-                    diORx: "0", 
+                    districtCode: "0", 
+                    entrance: "请选择", 
+                    // diORx: "0", 
                 }, 
                 rules: { 
-                    districtCode: [
-                        {validator: checkDistrictCode, trigger: 'blur' }
-                    ] ,
+                    // districtCode: [
+                    //     {validator: checkDistrictCode, trigger: 'blur' }
+                    // ] ,
                     account: [
                         {validator: checkAccount, trigger: 'blur'}
                     ],
@@ -102,32 +118,44 @@
     methods: { 
       //登陆
       login(form) {  
-        let that = this;
-        this.$refs[form].validate((valid) => {
-          if(valid) {
-            login(this.form).then(res => {
-                console.log(res)
-                if(res.msgCode === "Bad") {
-                  //610103
-                  that.$notify.error({
-                    title: res.errorMsg,
-                    duration: 2000
-                  })
-                }else {
-                  if(res.data.type === 2) {
+        if(this.form.entrance == '请选择') {
+          this.$notify.error({
+            title: '请选择测评类型'
+          })
+        }else {
+          let that = this;
+          this.$refs[form].validate((valid) => {
+            if(valid) {
+              login(this.form).then(res => {
+                  console.log(res)
+                  if(res.msgCode === "Bad") {
+                    //610103
                     that.$notify.error({
-                      title: "此账号仅可登陆小程序"
+                      title: res.errorMsg,
+                      duration: 2000
                     })
                   }else {
-                    window.sessionStorage.setItem('state', JSON.stringify({'loginInfo': res.data}))
-                    that.$store.commit("saveLoginInfo", res.data)
-                    that.$router.push({path: '/index/appraisal'})
+                    if(res.data.type === 2) {
+                      that.$notify.error({
+                        title: "此账号仅可登陆小程序"
+                      })
+                    }else {
+                      window.sessionStorage.setItem('state', JSON.stringify({'loginInfo': res.data}))
+                      that.$store.commit("saveLoginInfo", res.data);
+                      that.$store.commit("saveEntrance", that.form.entrance)
+                      that.$router.push({path: '/index/appraisal'})
+                    }
                   }
-                }
-            })
-          }
-        })
+              })
+            }
+          })
+        }
       },
+      //下拉选择
+      handleDropdownChose(e) {
+        console.log(e)
+        this.form.entrance = e;
+      }
     } 
 } 
 </script>

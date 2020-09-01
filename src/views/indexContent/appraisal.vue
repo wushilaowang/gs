@@ -69,6 +69,7 @@ export default {
             let that = this;
             let data = {
                 url: '/api/GetAllAppraisalCode',
+                params: {entrance: that.$store.state.entrance}
             }
             generalGet(data).then((res) => {
                 console.log(res);

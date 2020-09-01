@@ -109,7 +109,8 @@ export default {
                         DistrictCode: this.userForm.Type == 2 ? this.choseDistrict.value : this.choseDistrict.value + ',0',
                         DistrictName: this.choseDistrict.text,
                         Type: this.userForm.Type,
-                        diORx: this.userForm.diORx
+                        diORx: this.userForm.diORx,
+                        entrance: this.$store.state.entrance
                     }
                 }
                 generalGet(data).then((res) => {

@@ -14,19 +14,32 @@
                     {{scope.districtName==0?'地级':'县级'}}
                 </template>
             </el-table-column>
-            
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button size='small' @click="handleDistributeDistrict(scope)">分配区域</el-button>
+                </template>
+            </el-table-column>
         </el-table>
         
+        <el-dialog v-if="showDistrictTree" :visible.sync="showDistrictTree">
+            <districtTree :currentUser="currentUser" @reloadFatherUserTable="reloadFatherUserTable"></districtTree>
+        </el-dialog>
             
     </div>
 </template>
 
 <script>
-import {generalGet} from '../../network/general'
+import {generalGet} from '../../network/general';
+
+import districtTree from '../../components/districtTree'
 export default {
     name: 'allUser',
+    components: {
+        districtTree,
+    },
     data() {
         return {
+            showDistrictTree: false,
             allUserTable: [],
             json_fileds: {
                 '账号': 'account',
@@ -34,6 +47,7 @@ export default {
                 '姓名': 'realName',
                 '区域': 'districtName',
             },
+            currentUser: {}
         }
     },
     methods: {
@@ -41,15 +55,26 @@ export default {
         exportExcel() {
             
         },
+        //加载用户数据
         loadAllUserTable() {
             let that = this;
             let data = {
-                url: '/api/ShowAllUser'
+                url: '/api/ShowAllUser',
+                params: {entrance: this.$store.state.entrance}
             }
             generalGet(data).then((res) => {
                 console.log(res);
-                that.allUserTable = res.data
+                that.allUserTable = res.data;
             })
+        },
+        //分配区域按钮
+        handleDistributeDistrict(scope) {
+            this.currentUser = scope.row;
+            this.showDistrictTree = true;
+        },
+        //子组件调用重新加载数据
+        reloadFatherUserTable() {
+            this.loadAllUserTable()
         }
     },
     mounted() {

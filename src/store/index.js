@@ -4,7 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
-  loginInfo: {}
+  loginInfo: {},
+  entrance: ''
 }
 
 export default new Vuex.Store({
@@ -12,6 +13,9 @@ export default new Vuex.Store({
   mutations: {
     saveLoginInfo(state, payload) {
       state.loginInfo = payload
+    },
+    saveEntrance(state, payload) {
+      state.entrance = payload;
     }
   },
   actions: {

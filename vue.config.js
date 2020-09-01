@@ -19,7 +19,7 @@ module.exports = {
         hotOnly: false,
         proxy: {
             '/api': {
-                target: 'https://wmcscp.gsinfo.cn/localwmcs',//'http://211.158.66.55',//'https://wmcscp.gsinfo.cn',// 你接口的域名
+                target: 'http://211.158.66.55/wmgz',//'https://wmcscp.gsinfo.cn/localwmcs',////'https://wmcscp.gsinfo.cn',// 你接口的域名
                 secure: true, // 如果是https接口，需要配置这个参数为true
                 changeOrigin: true, // 如果接口跨域，需要进行这个参数配置为true
                 pathRewrite: {
