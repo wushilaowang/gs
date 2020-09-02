@@ -30,14 +30,14 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.Dgv_CardContent = new System.Windows.Forms.DataGridView();
+            this.CardContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Beizhu = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.score = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_CardName = new System.Windows.Forms.Label();
             this.Btn_Next = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.Btn_back = new System.Windows.Forms.Button();
             this.LB_CardNames = new System.Windows.Forms.ListBox();
-            this.CardContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Beizhu = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.score = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Dgv_CardContent)).BeginInit();
             this.SuspendLayout();
@@ -71,6 +71,27 @@
             this.Dgv_CardContent.TabIndex = 7;
             this.Dgv_CardContent.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.Dgv_CardContent_RowStateChanged);
             this.Dgv_CardContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Dgv_CardContent_KeyPress);
+            // 
+            // CardContent
+            // 
+            this.CardContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.CardContent.HeaderText = "卡片选项(必填)";
+            this.CardContent.Name = "CardContent";
+            this.CardContent.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Beizhu
+            // 
+            this.Beizhu.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Beizhu.HeaderText = "选项备注(选填)";
+            this.Beizhu.Name = "Beizhu";
+            this.Beizhu.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // score
+            // 
+            this.score.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.score.HeaderText = "分值(必填)";
+            this.score.Name = "score";
+            this.score.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Label_CardName
             // 
@@ -130,27 +151,7 @@
             this.LB_CardNames.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LB_CardNames_MouseClick);
             this.LB_CardNames.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.LB_CardNames_DrawItem);
             this.LB_CardNames.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.LB_CardNames_MeasureItem);
-            // 
-            // CardContent
-            // 
-            this.CardContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.CardContent.HeaderText = "卡片选项(必填)";
-            this.CardContent.Name = "CardContent";
-            this.CardContent.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Beizhu
-            // 
-            this.Beizhu.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Beizhu.HeaderText = "选项备注(选填)";
-            this.Beizhu.Name = "Beizhu";
-            this.Beizhu.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // score
-            // 
-            this.score.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.score.HeaderText = "分值(必填)";
-            this.score.Name = "score";
-            this.score.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.LB_CardNames.SelectedIndexChanged += new System.EventHandler(this.LB_CardNames_SelectedIndexChanged);
             // 
             // StartSetCardContent
             // 

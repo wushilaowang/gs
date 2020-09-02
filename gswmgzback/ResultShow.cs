@@ -15,13 +15,14 @@ using MSWord = Microsoft.Office.Interop.Word;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml;
 
 namespace gswmgzback
 {
     public partial class ResultShow : Form
     {
 
-        public string yumin = "https://wmcscp.gsinfo.cn/gswmgz/cepingresult/";// "http://211.158.66.55/wmgz/api/";//  
+        public string yumin = "http://211.158.66.55/wmgz/api/";//  "https://wmcscp.gsinfo.cn/gswmgz/cepingresult/";// 
         //////公共成员
         ///
         public static List<CardOutlin> PUBLCardOutlins = new List<CardOutlin>();
@@ -98,6 +99,13 @@ namespace gswmgzback
             CB_AppraisalCode.Items.Clear();
             LAppraisalCodes.Clear();
 
+            if (LogIn.entrance.Contains(AppraisalTypeENUM.Juvenile))
+            {
+                button3.Enabled = false;
+                button3.Visible = false;
+                LB_DistrictScore.Enabled = false;
+                LB_DistrictScore.Visible = false;
+            }
 
             string url = Form1.UrlPre + "GetAllAppraisalCode" + "?entrance=" + LogIn.entrance;
             string Httpres = HttpGet.HttpGetFunc(url);
@@ -164,6 +172,7 @@ namespace gswmgzback
                 DistrictTb allAppraisalCodesDatum = JsonConvert.DeserializeObject<DistrictTb>(s);
                 AllDistrict.Add(allAppraisalCodesDatum);
             }
+            
         }
 
         private void CB_AppraisalCode_MouseClick(object sender, MouseEventArgs e)
@@ -204,65 +213,91 @@ namespace gswmgzback
         private void getCPresult()
         {
             LCPresults.Clear();
-            if (LogIn.userinfosDatum.Type == 1)
+            string url = Form1.UrlPre + "GetCpResults?AppraisalCode=" + Select_AppraisalCode;
+            string Httpres = HttpGet.HttpGetFunc(url);
+            if (Httpres == null)
             {
-                //如果是测评带队则只能看当前自己负责的区域
-
-                string[] CurrentUserDistrict = LogIn.userinfosDatum.DistrictCode.Split(',');
-                foreach (var dis in CurrentUserDistrict)
-                {
-                    string url = Form1.UrlPre + "GetCpResults?AppraisalCode=" + Select_AppraisalCode + "&districtCode=" + dis;
-                    string Httpres = HttpGet.HttpGetFunc(url);
-                    if (Httpres == null)
-                    {
-                        MessageBox.Show("网络未连接");
-                        return;
-                    }
-
-                    //将字符串转换成json
-                    var Httpjsonresult = JObject.Parse(Httpres);
-                    //获取json中的data部分
-                    JToken HttpJsonvalue = Httpjsonresult.GetValue("data");
-                    int resultrow = HttpJsonvalue.Count();
-
-                    for (int i = 0; i < resultrow; i++)
-                    {
-                        int column = HttpJsonvalue[i].Count();
-                        var s = HttpJsonvalue[i].ToString();
-                        AppraisalResultDatum appraisalResultDatum = JsonConvert.DeserializeObject<AppraisalResultDatum>(s);
-
-                        LCPresults.Add(appraisalResultDatum);
-                    }
-
-                }
-
+                MessageBox.Show("网络未连接");
+                return;
             }
-            else//管理员可以看到所有测评区域
+
+            //将字符串转换成json
+            var Httpjsonresult = JObject.Parse(Httpres);
+            //获取json中的data部分
+            JToken HttpJsonvalue = Httpjsonresult.GetValue("data");
+            int resultrow = HttpJsonvalue.Count();
+
+            for (int i = 0; i < resultrow; i++)
             {
+                int column = HttpJsonvalue[i].Count();
+                var s = HttpJsonvalue[i].ToString();
+                AppraisalResultDatum appraisalResultDatum = JsonConvert.DeserializeObject<AppraisalResultDatum>(s);
 
-                string url = Form1.UrlPre + "GetCpResults?AppraisalCode=" + Select_AppraisalCode;
-                string Httpres = HttpGet.HttpGetFunc(url);
-                if (Httpres == null)
-                {
-                    MessageBox.Show("网络未连接");
-                    return;
-                }
-
-                //将字符串转换成json
-                var Httpjsonresult = JObject.Parse(Httpres);
-                //获取json中的data部分
-                JToken HttpJsonvalue = Httpjsonresult.GetValue("data");
-                int resultrow = HttpJsonvalue.Count();
-
-                for (int i = 0; i < resultrow; i++)
-                {
-                    int column = HttpJsonvalue[i].Count();
-                    var s = HttpJsonvalue[i].ToString();
-                    AppraisalResultDatum appraisalResultDatum = JsonConvert.DeserializeObject<AppraisalResultDatum>(s);
-
-                    LCPresults.Add(appraisalResultDatum);
-                }
+                LCPresults.Add(appraisalResultDatum);
             }
+            //if (LogIn.userinfosDatum.Type == 1)
+            //{
+            //    //如果是测评带队则只能看当前自己负责的区域
+
+            //    string[] CurrentUserDistrict = LogIn.userinfosDatum.DistrictCode.Split(',');
+            //    foreach (var dis in CurrentUserDistrict)
+            //    {
+            //        //if (dis.Substring(0, 1) == "0")
+            //        //{
+            //        //    continue;
+            //        //}
+            //        string url = Form1.UrlPre + "GetCpResults?AppraisalCode=" + Select_AppraisalCode + "&districtCode=" + dis;
+            //        string Httpres = HttpGet.HttpGetFunc(url);
+            //        if (Httpres == null)
+            //        {
+            //            MessageBox.Show("网络未连接");
+            //            return;
+            //        }
+
+            //        //将字符串转换成json
+            //        var Httpjsonresult = JObject.Parse(Httpres);
+            //        //获取json中的data部分
+            //        JToken HttpJsonvalue = Httpjsonresult.GetValue("data");
+            //        int resultrow = HttpJsonvalue.Count();
+
+            //        for (int i = 0; i < resultrow; i++)
+            //        {
+            //            int column = HttpJsonvalue[i].Count();
+            //            var s = HttpJsonvalue[i].ToString();
+            //            AppraisalResultDatum appraisalResultDatum = JsonConvert.DeserializeObject<AppraisalResultDatum>(s);
+
+            //            LCPresults.Add(appraisalResultDatum);
+            //        }
+
+            //    }
+
+            //}
+            //else//管理员可以看到所有测评区域
+            //{
+
+            //    string url = Form1.UrlPre + "GetCpResults?AppraisalCode=" + Select_AppraisalCode;
+            //    string Httpres = HttpGet.HttpGetFunc(url);
+            //    if (Httpres == null)
+            //    {
+            //        MessageBox.Show("网络未连接");
+            //        return;
+            //    }
+
+            //    //将字符串转换成json
+            //    var Httpjsonresult = JObject.Parse(Httpres);
+            //    //获取json中的data部分
+            //    JToken HttpJsonvalue = Httpjsonresult.GetValue("data");
+            //    int resultrow = HttpJsonvalue.Count();
+
+            //    for (int i = 0; i < resultrow; i++)
+            //    {
+            //        int column = HttpJsonvalue[i].Count();
+            //        var s = HttpJsonvalue[i].ToString();
+            //        AppraisalResultDatum appraisalResultDatum = JsonConvert.DeserializeObject<AppraisalResultDatum>(s);
+
+            //        LCPresults.Add(appraisalResultDatum);
+            //    }
+            //}
         }
 
         //获取当前测评编号
@@ -284,9 +319,9 @@ namespace gswmgzback
         private void getCurCardCode(string area = "")
         {
             string CardName = LB_CardName.Text;
-            if (area != "" && !CardName.Contains("问卷"))
+            if (area != "" && !CardName.Contains(CardTypeENUM.Questionary))
             {
-                if (!CardName.Contains("未成"))
+                if (!CB_AppraisalCode.Text.Contains(AppraisalTypeENUM.Juvenile))
                 {
 
                     Select_CardCode = LCPresults.Where(x => x.CardName+x.InputName  == CardName && x.AppraisalCode == Select_AppraisalCode && x.DistrictCode == Select_DistrictCode).Select(x => x.CardCode).FirstOrDefault();
@@ -298,7 +333,15 @@ namespace gswmgzback
             }
             else
             {
-                Select_CardCode = LCPresults.Where(x => x.InputName == CardName && x.AppraisalCode == Select_AppraisalCode).Select(x => x.CardCode).FirstOrDefault();
+                if (!CB_AppraisalCode.Text.Contains(AppraisalTypeENUM.Juvenile))
+                {
+
+                    Select_CardCode = LCPresults.Where(x => x.InputName == CardName && x.AppraisalCode == Select_AppraisalCode).Select(x => x.CardCode).FirstOrDefault();
+                }
+                else
+                {
+                    Select_CardCode = LCPresults.Where(x => x.CardName == CardName && x.AppraisalCode == Select_AppraisalCode).Select(x => x.CardCode).FirstOrDefault();
+                }
             }
         }
 
@@ -306,9 +349,9 @@ namespace gswmgzback
         private void getCurCardId(string area = "")
         {
             string CardName = LB_CardName.Text;
-            if (area != "" && !CardName.Contains("问卷"))
+            if (area != "" && !CardName.Contains(CardTypeENUM.Questionary))
             {
-                if (!CardName.Contains("未成"))
+                if (!CB_AppraisalCode.Text.Contains(AppraisalTypeENUM.Juvenile))
                 {
 
                     Select_CardIds = LCPresults.Where(x => x.CardName + x.InputName == CardName && x.AppraisalCode == Select_AppraisalCode && x.DistrictCode == area).OrderBy(x => x.Id).OrderBy(x => x.CardCode).Select(x => x.Id).ToList();
@@ -320,7 +363,15 @@ namespace gswmgzback
             }
             else
             {
-                Select_CardIds = LCPresults.Where(x => x.InputName == CardName && x.AppraisalCode == Select_AppraisalCode).OrderBy(x => x.Id).OrderBy(x => x.CardCode).Select(x => x.Id).ToList();
+                if (!CB_AppraisalCode.Text.Contains(AppraisalTypeENUM.Juvenile))
+                {
+
+                    Select_CardIds = LCPresults.Where(x => x.InputName == CardName && x.AppraisalCode == Select_AppraisalCode).OrderBy(x => x.Id).OrderBy(x => x.CardCode).Select(x => x.Id).ToList();
+                }
+                else
+                {
+                    Select_CardIds = LCPresults.Where(x => x.CardName == CardName && x.AppraisalCode == Select_AppraisalCode).OrderBy(x => x.Id).OrderBy(x => x.CardCode).Select(x => x.Id).ToList();
+                }
             }
         }
 
@@ -463,7 +514,7 @@ namespace gswmgzback
 
             LB_CardScore.Text = "卡片得分: " + Math.Round(CurCardSumScore, 2);
             
-            if (!CB_AppraisalCode.Text.Contains("未成年"))
+            if (!CB_AppraisalCode.Text.Contains(AppraisalTypeENUM.Juvenile))
             {
                 CurCardSumScore = Convert.ToDouble(LCardScore.Where(x => x.Id == Select_CardIds[count - 1] && x.AppraisalCode == Select_AppraisalCode).FirstOrDefault().Sum);
                 LB_CardScore.Text = "得分: " + Math.Round(CurCardSumScore, 2);
@@ -519,9 +570,9 @@ namespace gswmgzback
 
             foreach (var item in cardnames)
             {
-                if (!CB_AppraisalCode.Text.Contains("未成"))
+                if (!CB_AppraisalCode.Text.Contains(AppraisalTypeENUM.Juvenile))
                 {
-                    if (item.CardName.Contains("问卷"))
+                    if (item.CardName.Contains(CardTypeENUM.Questionary))
                     {
 
                         LB_CardName.Items.Add(item.InputName);
@@ -557,12 +608,19 @@ namespace gswmgzback
 
             cardSeries.XValueType = ChartValueType.String;  //设置X轴上的值类型
             cardSeries.IsValueShownAsLabel = true;
+            //cardSumScores = LCardScore.Where(x => x.AppraisalCode == Select_AppraisalCode && x.DistrictCode.Substring(0, 6) == Select_DistrictCode.Substring(0, 6))
+            //      .GroupBy(m => new { m.CardName, m.Sum }).Select(g => new CardSumScoreDatum
+            //      {
+            //          cardName = g.Key.CardName,
+            //          SumScore = g.Key.Sum,
+            //          InputName = g.
+            //      }).ToList();
             cardSumScores = LCardScore.Where(x => x.AppraisalCode == Select_AppraisalCode && x.DistrictCode.Substring(0, 6) == Select_DistrictCode.Substring(0, 6))
-                 .GroupBy(x => new { x.CardName, x.Sum }).Select(x => (new CardSumScoreDatum
-                 {
-                     cardName = x.Key.CardName,
-                     SumScore = x.Key.Sum
-                 })).ToList();
+                  .GroupBy(x => new { x.CardName, x.Sum }).Select(x => (new CardSumScoreDatum
+                  {
+                      cardName = x.Key.CardName,
+                      SumScore = x.Key.Sum
+                  })).ToList();
             //设置曲线类型,这里是柱状图
             cardSeries.ChartType = SeriesChartType.Column;
             //给系列上的点进行赋值，分别对应横坐标和纵坐标的值
@@ -615,7 +673,7 @@ namespace gswmgzback
                     }
                     //选A的个数
                     int ACount = temp.Split('1').Length - 1;
-                    if (cardSumScores[0].cardName.Contains("辅导"))//1所
+                    if (cardSumScores[0].cardName.Contains(CardTypeENUM.Teach))//1所
                     {
                         if (ACount >= 1)
                         {
@@ -628,7 +686,7 @@ namespace gswmgzback
                         }
 
                     }
-                    else if (cardSumScores[0].cardName.Contains("机构"))//两所
+                    else if (cardSumScores[0].cardName.Contains(CardTypeENUM.Institution))//两所
                     {
                         if (ACount >= 2)
                         {
@@ -646,7 +704,7 @@ namespace gswmgzback
                         }
 
                     }
-                    else if (cardSumScores[0].cardName.Contains("网吧") || cardSumScores[0].cardName.Contains("大街") || cardSumScores[0].cardName.Contains("公益"))//三所
+                    else if (cardSumScores[0].cardName.Contains(CardTypeENUM.InternetBar) || cardSumScores[0].cardName.Contains(CardTypeENUM.Street) || cardSumScores[0].cardName.Contains(CardTypeENUM.commonweal))//三所
                     {
                         if (ACount >= 3)
                         {
@@ -799,7 +857,7 @@ namespace gswmgzback
                     var tmp = LCPcontents.Where(x => x.AppraisalCode == LCPresults[s].AppraisalCode && x.CardCode == LCPresults[s].CardCode && x.Cixu == i + 1).First();
                     CurCardScore = LCPcontents.Where(x => x.AppraisalCode == LCPresults[s].AppraisalCode && x.CardCode == LCPresults[s].CardCode && x.Cixu == i + 1)
                     .Select(x => x.Score).FirstOrDefault();
-                    if (LCPresults[s].CardName.Contains("问卷"))
+                    if (LCPresults[s].CardName.Contains(CardTypeENUM.Questionary))
                     {
                         CurCardScore = 1.00;
                     }
@@ -862,7 +920,7 @@ namespace gswmgzback
                     AppraisalCode = LCPresults[s].AppraisalCode,
                     Checks = scores.Substring(0, scores.Length - 1),
                     Sum = Math.Round(tempscore, 2, MidpointRounding.AwayFromZero),
-                    InputName = LCPresults[s].CardName.Contains("问卷") ? LCPresults[s].InputName.Substring(0, LCPresults[s].InputName.Length-4)+ LCPresults[s].CardName : LCPresults[s].CardName+LCPresults[s].InputName 
+                    InputName = LCPresults[s].CardName.Contains(CardTypeENUM.Questionary) ? LCPresults[s].InputName.Substring(0, LCPresults[s].InputName.Length-4)+ LCPresults[s].CardName : LCPresults[s].CardName+LCPresults[s].InputName 
                     //InputName = LCPresults[s].InputName
 
                 };
@@ -886,7 +944,7 @@ namespace gswmgzback
                 double? curInputSum = 0;//记录当前总分
                 for(int i = 0; i < LCardScore.Count; i++)
                 {
-                    if(curInputName!= LCardScore[i].InputName && !LCardScore[i].CardName.Contains("问卷"))
+                    if(curInputName!= LCardScore[i].InputName && !LCardScore[i].CardName.Contains(CardTypeENUM.Questionary))
                     {
                         double? curSum = curInputcount==0?0: Math.Round(double.Parse((curInputSum / curInputcount).ToString()),2);
                         for (int j=0;j< curInputcount; j++)
@@ -902,7 +960,7 @@ namespace gswmgzback
                         curInputcount += 1;
                         curInputSum += LCardScore[i].Sum;
                     }
-                    else if (!LCardScore[i].CardName.Contains("问卷"))
+                    else if (!LCardScore[i].CardName.Contains(CardTypeENUM.Questionary))
                     {
                         curInputcount += 1;
                         curInputSum += LCardScore[i].Sum;
@@ -930,7 +988,7 @@ namespace gswmgzback
             int siteNum = 0;
             for (int j = 0; j < LCardOutlins.Count; j++)
             {
-                if (!LCardOutlins[j].CardName.Contains("问卷"))
+                if (!LCardOutlins[j].CardName.Contains(CardTypeENUM.Questionary))
                 {
                     continue;
                 }
@@ -980,7 +1038,7 @@ namespace gswmgzback
                      cardName = x.Key.InputName,
                      SumScore = x.Average(n => n.Sum)
                  })).ToList();
-            int WJCount = LCardScore.Where(x => x.CardName.Contains("问卷")).Count();
+            int WJCount = LCardScore.Where(x => x.CardName.Contains(CardTypeENUM.Questionary)).Count();
 
             //绘制曲线
             //设置曲线高度
@@ -1512,7 +1570,7 @@ namespace gswmgzback
                     //LB_CardName.Text = LB_CardName.Items[k].ToString().Trim();
 
                     LB_CardName.SelectedIndex = k;
-                    if (LB_CardName.Text.Contains("问卷"))
+                    if (LB_CardName.Text.Contains(CardTypeENUM.Questionary))
                     {
                         continue;
                     }
@@ -1645,7 +1703,7 @@ namespace gswmgzback
                     LB_CardName.SelectedIndex = k;
 
 
-                    if (LB_CardName.Text.Contains("问卷"))
+                    if (LB_CardName.Text.Contains(CardTypeENUM.Questionary))
                     {
                         if (ifWJPrint)
                         {
@@ -2279,6 +2337,8 @@ namespace gswmgzback
             //    MessageBox.Show("报表为空,无表格需要导出", "提示", MessageBoxButtons.OK);
             //}
         }
+
+       
     }
 
 }

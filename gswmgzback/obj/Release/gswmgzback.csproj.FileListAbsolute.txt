@@ -59,3 +59,4 @@ C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Release\甘肃文明工作
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Release\甘肃文明工作后台.pdb
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Release\gswmgzback.LoaderForm.resources
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Release\gswmgzback.SumScoreForm.resources
+C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Release\gswmgzback.csprojAssemblyReference.cache

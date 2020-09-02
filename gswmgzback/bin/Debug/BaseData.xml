@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Data>
+
+  <AppraisalType>
+    <dt Unit = "单位" Village = "村镇" Community = "社区" School = "校" Juvenile = "未成年"></dt>
+  </AppraisalType>
+  <CardType>
+    <dt Questionary = "调查问卷"></dt>
+  </CardType>
+</Data>

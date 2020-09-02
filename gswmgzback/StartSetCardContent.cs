@@ -20,6 +20,7 @@ namespace gswmgzback
         int Cur_index=-1;
         string Cur_Name = "";
 
+        string Cur_CardCode = "";
 
         private void StartSetCardContent_Load(object sender, EventArgs e)
         {
@@ -36,11 +37,11 @@ namespace gswmgzback
             DT_CardContent.Columns.Add("score", typeof(string));
         }
 
-        private void iniStarsSetCardContent()
+        public void iniStarsSetCardContent()
         {
-            if (Cur_Name == Label_CardName.Text) {
-                return;
-            }
+            //if (Cur_Name == Label_CardName.Text) {
+            //    return;
+            //}
             LB_CardNames.Items.Clear();
             DataTable CardsSum = StartAppraisal.DT_CardListTable;
             if (CardsSum.Rows.Count == 0)
@@ -100,6 +101,8 @@ namespace gswmgzback
                 
                 Cur_index = index;
                 Cur_Name = LB_CardNames.Text;
+
+                Cur_CardCode = StartAppraisal.DT_CardListTable.Rows[index]["cardCode"].ToString();
                 //
                 Dgv_CardContent.Rows.Clear();
                 
@@ -137,14 +140,13 @@ namespace gswmgzback
         }
 
 
-
         public void AddContent()
         {
             //把焦点清空可以保存当前行
             Dgv_CardContent.CurrentCell = null; 
             if (Label_CardName.Text != "卡片名")
             {
-                string Cur_CardCode = "";
+                
                 //根据卡片名获取卡片Code
                 for(int i=0;i< StartAppraisal.DT_CardListTable.Rows.Count; i++)
                 {
@@ -354,6 +356,11 @@ namespace gswmgzback
                 }
 
             }
+        }
+
+        private void LB_CardNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -58,5 +58,6 @@ C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\gswmgzback.csproj.Co
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\甘肃文明工作后台.exe
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\甘肃文明工作后台.pdb
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\gswmgzback.LoaderForm.resources
-C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\gswmgzback.csprojAssemblyReference.cache
 C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\gswmgzback.SumScoreForm.resources
+C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\bin\Debug\BaseData.xml
+C:\Users\CXJ\source\repos\gswmgzcpBack\gswmgzback\obj\Debug\gswmgzback.csprojAssemblyReference.cache

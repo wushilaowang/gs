@@ -18,7 +18,7 @@ namespace gswmgzback
 
         private void SumScoreForm_Load(object sender, EventArgs e)
         {
-            var LCardScore = ResultShow.PUBLCardScore.Where(x=>x.DistrictName== ResultShow.PUBdistrictName).ToList();
+            var LCardScore = ResultShow.PUBLCardScore.Where(x => x.DistrictName == ResultShow.PUBdistrictName).ToList();
             var LCardOutlins = ResultShow.PUBLCardOutlins;
             DataTable dt = new DataTable();//建立个数据表
             dt.Columns.Add(new DataColumn("测评点", typeof(string)));
@@ -27,16 +27,16 @@ namespace gswmgzback
                 dt.Columns.Add(new DataColumn(LCardOutlins[i].CardName, typeof(string)));//在表中添加int类型的列
             }
             dt.Columns.Add(new DataColumn("合计", typeof(string)));
-            DataRow dr ;
+            DataRow dr;
             string curname = "";
             string localName = "";
             List<string> places = new List<string>();
 
             for (int i = 0; i < LCardScore.Count; i++)
             {
-                if (LCardScore[i].InputName.Contains("问卷"))
+                if (LCardScore[i].InputName.Contains(CardTypeENUM.Questionary))
                 {
-                    localName = LCardScore[i].InputName.Substring(0, LCardScore[i].InputName.Length-4);
+                    localName = LCardScore[i].InputName.Substring(0, LCardScore[i].InputName.Length - 4);
                 }
                 else
                 {
@@ -55,18 +55,18 @@ namespace gswmgzback
                     }
                     dr = dt.NewRow();
                     curname = localName;
-                    double? sum = 0; 
+                    double? sum = 0;
                     for (int j = 0; j < LCardOutlins.Count; j++)
                     {
                         try
                         {
-                            if (LCardOutlins[j].CardName.Contains("问卷"))
+                            if (LCardOutlins[j].CardName.Contains(CardTypeENUM.Questionary))
                             {
-                                curname += "调查问卷";
+                                curname += CardTypeENUM.Questionary;
 
                             }
-                            dr[LCardOutlins[j].CardName] = LCardScore.Where(x => x.InputName==(curname) && x.CardCode == LCardOutlins[j].CardCode).Select(x => x.Sum).First();
-                            sum += LCardScore.Where(x => x.InputName==(curname) && x.CardCode == LCardOutlins[j].CardCode).Select(x => x.Sum).First();
+                            dr[LCardOutlins[j].CardName] = LCardScore.Where(x => x.InputName == (curname) && x.CardCode == LCardOutlins[j].CardCode).Select(x => x.Sum).First();
+                            sum += LCardScore.Where(x => x.InputName == (curname) && x.CardCode == LCardOutlins[j].CardCode).Select(x => x.Sum).First();
 
 
                             curname = localName;
@@ -86,7 +86,7 @@ namespace gswmgzback
                 {
                     continue;
                 }
-                
+
             }
 
             dataGridView1.DataSource = dt;

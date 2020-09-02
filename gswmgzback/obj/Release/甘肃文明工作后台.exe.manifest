@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="甘肃文明工作后台.exe" size="427944">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="甘肃文明工作后台.exe" size="428456">
       <assemblyIdentity name="甘肃文明工作后台" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>+i2GrGm6J39XHSPDI0RV6vmauDQ=</dsig:DigestValue>
+        <dsig:DigestValue>xy5O64Rx4VX3RuXHe67xj45dcsQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

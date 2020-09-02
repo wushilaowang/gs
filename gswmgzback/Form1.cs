@@ -21,7 +21,7 @@ namespace gswmgzback
         public static SetQuestionnaireNumber setQuestionnaireNumber;
 
         ResultShow resultshow;
-        public static string UrlPre ="https://wmcscp.gsinfo.cn/gswmgz/api/";//"http://211.158.66.55/wmgz/api/";//   
+        public static string UrlPre ="http://211.158.66.55/wmgz/api/";// "https://wmcscp.gsinfo.cn/gswmgz/api/";//
 
         private void 开始测评ToolStripMenuItem_Click(object sender, EventArgs e)
         {

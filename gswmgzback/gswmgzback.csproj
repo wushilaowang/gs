@@ -93,6 +93,7 @@
     <Compile Include="addUser.Designer.cs">
       <DependentUpon>addUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppraisalTypeENUM.cs" />
     <Compile Include="ChangeUserPermission.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,6 +301,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BaseData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -64,8 +64,6 @@ namespace gswmgzback
 
         private void Btn_Next_Click(object sender, EventArgs e)
         {
-            
-
             //把焦点清空可以保存当前行
             DG_CardList.CurrentCell = null;
             //NoReCardCount = DG_CardList.Rows.Count - 1;
@@ -78,7 +76,6 @@ namespace gswmgzback
                 {
                     MessageBox.Show("总分为0");
                     return;
-
                 }
             }catch(Exception)
             {
@@ -97,7 +94,6 @@ namespace gswmgzback
             int wjCodeNum = 1;
             for (int i = 0; i < DG_CardList.Rows.Count - 1; i++)
             {
-
                 if (DG_CardList.Rows[i].Cells[0].Value == null || DG_CardList.Rows[i].Cells[1].Value == null)
                 {
                     MessageBox.Show("请检查表格,确保无空值");
@@ -155,11 +151,11 @@ namespace gswmgzback
             if (Form1.startSetCardContent == null || Form1.startSetCardContent.IsDisposed)
             {
                 Form1.startSetCardContent = new StartSetCardContent();
-
                 Form1.startSetCardContent.Show();
             }
             else
             {
+                Form1.startSetCardContent.iniStarsSetCardContent();
                 Form1.startSetCardContent.Show();
             }
             
