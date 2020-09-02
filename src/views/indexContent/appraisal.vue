@@ -32,8 +32,8 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog :visible.sync="addAppraisalDialog" width="40%" modal title="添加测评">
-            <addAppraisal />
+        <el-dialog :visible.sync="addAppraisalDialog" width="40%" modal title="添加测评" @closed="handleCloseAddAppraisal">
+            <addAppraisal ref="addAppraisal" />
         </el-dialog>
         <el-dialog :visible.sync="addCardDialog" width="40%" modal title="添加卡片">
             <addCard :currentAppraisalCode="currentAppraisalCode" />
@@ -64,6 +64,10 @@ export default {
         this.loadAppraisal()
     },
     methods: {
+        //addAppraisal页面重置data
+        handleCloseAddAppraisal() {
+            this.$refs.addAppraisal.resetData();
+        },
         //加载数据
         loadAppraisal() {
             let that = this;

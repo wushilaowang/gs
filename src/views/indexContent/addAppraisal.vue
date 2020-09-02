@@ -10,9 +10,14 @@
                     <el-radio label="卡片">卡片</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="卡片数量" prop="cardNum">
-                <el-input clearable v-model="appraisalForm.cardNum" placeholder="请输入卡片数量"/>
-            </el-form-item>
+            <div class="cardList" v-for="(item, index) in cardNum" :key="index">
+                <el-form-item label="卡片名称">
+                    <el-input class="cardNameInput" @focus="handleFocus" :id="index + 1" clearable v-model="cardName[index]" placeholder="请输入卡片名称"/>
+                </el-form-item>
+                <el-form-item label="选项数量">
+                    <el-input clearable v-model="cardItems[index]" :disabled="cardItemsDisabled[index]" placeholder="请输入卡片数量"/>
+                </el-form-item>
+            </div>
             <el-form-item>
                 <el-button @click="handleCardContentNext">下一步</el-button>
             </el-form-item>
@@ -23,17 +28,20 @@
 
 
         
-        <el-form v-if="showCardContent" :model="cardContentForm">
-            <el-form-item label="卡片内容">
-                <el-input v-model="cardContentForm.item"></el-input>
-            </el-form-item>
-            <el-form-item label="备注">
-                <el-input v-model="cardContentForm.beizhu"></el-input>
-            </el-form-item>
-            <el-form-item label="区域等级">
-            </el-form-item>
-            <el-button @click="handleAppraisalBack">上一步</el-button>
-            <el-button @click="handleSetCardNumNext">下一步</el-button>
+        <el-form v-if="showCardContent" :inline="true" :model="cardContentForm">
+            <div v-for="(item, index) in cardName" :key="index">
+                <el-form-item label="卡片内容">
+                    <el-input v-model="cardContentForm.item"></el-input>
+                </el-form-item>
+                <el-form-item label="备注">
+                    <el-input v-model="cardContentForm.beizhu"></el-input>
+                </el-form-item>
+                <el-form-item label="分值">
+                    <el-input v-model="cardContentForm.beizhu"></el-input>
+                </el-form-item>
+                <el-button @click="handleAppraisalBack">上一步</el-button>
+                <el-button @click="handleSetCardNumNext">下一步</el-button>
+            </div>
         </el-form>
         <div v-if="showSetCardNum">
             SetCardNum
@@ -78,6 +86,11 @@ export default {
         }
         
         return {
+            cardName: [],
+            cardItems: [],
+            cardItemsDisabled: [true],
+            //
+            cardNum: 1,
             //第二页卡片
             cardContentForm: {
                 cardCode: '',
@@ -94,9 +107,6 @@ export default {
             appraisalForm:{
                 totalScore: "40",
                 scoreType: "问卷",
-                cardNum: 1,
-                cardName: "k1",
-                cardItems: "1",
             },
             formRule: {
                 totalScore: [
@@ -112,10 +122,36 @@ export default {
         }
     },
     methods: {
+        //重置data
+        resetData() {
+            Object.assign(this.$data, this.$options.data.call(this))
+        },
+        //input聚焦加一行
+        handleFocus(e) {
+            console.log(e)
+            console.log(e.target.id)
+            if(e.target.id == this.cardNum) {
+                this.cardItemsDisabled[this.cardNum - 1] = false;
+                this.cardItemsDisabled.push(true)
+                this.cardNum += 1;
+                console.log(this.cardItemsDisabled)
+            }
+        },
         //下一步填卡片内容
         handleCardContentNext() {
-            this.showAppraisal = false;
-            this.showCardContent = true;
+            //判断是否填完整
+            let cardListFlag = false;
+            console.log(this.cardName)
+            console.log(this.cardItems)
+            console.log(this.cardNum)
+            if(this.cardName.length == 0 || this.appraisalForm.totalScore.trim() == '' || this.cardName.length < this.cardNum - 1 || this.cardItems.length < this.cardNum -1) {
+                this.$notify.error({
+                    title: '请填写完整'
+                })
+            }else {
+                this.showAppraisal = false;
+                this.showCardContent = true;
+            }
         },
         //上一步测评
         handleAppraisalBack() {
