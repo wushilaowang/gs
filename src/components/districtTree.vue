@@ -124,6 +124,7 @@ export default {
     mounted() {
         this.getDistrict();
         console.log(this.currentUser.districtName)
+ 
     }
 }
 </script>
