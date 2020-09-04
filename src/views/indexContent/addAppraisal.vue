@@ -22,9 +22,6 @@
             <el-form-item>
                 <el-button @click="handleCardContentNext">下一步</el-button>
             </el-form-item>
-            <el-form-item>
-                <el-button @click="submitAppraisalForm('appraisalForm')">提交</el-button>
-            </el-form-item>
         </el-form>
 
         <!-- 卡片内容 -->
@@ -54,18 +51,51 @@
             <el-button @click="handleSetCardNumNext">下一步</el-button>
         </el-form>
 
-        <!--  -->
+        <!-- 为区域分配卡片 -->
         <div v-if="showSetCardNum">
-            SetCardNum
-            <el-tree :props="props"  :data="districtList"  node-key="id" highlight-current="true"></el-tree>
-            
+            <div class="flex-box">
+                <el-cascader
+                    v-model="value"
+                    :options="districtList"
+                    :props="props"
+                    @change="handleCascaderChange">
+                </el-cascader>
+                <div v-if="currentDistrictCards.card">
+                    <div class="flex-box" v-for="(item,index) in currentDistrictCards.card" :key="index">
+                        <label>{{item.cardName}}</label>
+                        <el-input v-model="item.cardNum" placeholder="请输入卡片数量" :key="index" @change="handleCardNumChange(item)"></el-input>
+                    </div>
+                </div>
+            </div>
             <el-button @click="handleCardContentBack">上一步</el-button>
             <el-button @click="handleSetUserNext">下一步</el-button>
         </div>
+
+        <!--  -->
         <div v-if="showSetUser">
-            SetUser
+            <div v-for="(item,index) in userForm" :key="index">
+                <el-form :inline="true" label-width="7rem">
+                    <el-form-item label="用户名">
+                        <el-input :id="'user'+index" placeholder="请输入用户名" v-model="item.account" @focus="handleUserAdd"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input placeholder="请输入密码" v-model="item.password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="姓名">
+                        <el-input placeholder="请输入姓名" v-model="item.name"></el-input>
+                    </el-form-item>
+                    {{item.type}}
+                    <el-form-item label="类型">
+                        <el-radio-group v-model="item.type">
+                            <el-radio :label="0">系统管理员</el-radio>
+                            <el-radio :label="1">测评带队</el-radio>
+                            <el-radio :label="2">测评成员</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-form>
+            </div>
             <el-button @click="handleSetCardNumBack">上一步</el-button>
-            <el-button @click="handleSetUserNext">分配用户</el-button>
+            <el-button @click="submitAppraisal">提交</el-button>
         </div>
     </div>
 </template>
@@ -99,9 +129,13 @@ export default {
         }
         
         return {
+            currentDistrictCards: [],//当前选择区域的卡片
+            value: [],
             props: {
                 label: 'title',
-                children: 'children'
+                value: 'id',
+                children: 'children',
+                expandTrigger: 'hover' 
             },
             districtList: [],
             cardArr:[],
@@ -110,7 +144,7 @@ export default {
             cardItems: [],
             cardItemsDisabled: [true],
 
-            cardContent: [],
+            cardContent: [],//卡片选项的卡片内容
             cardMark: [],
             cardScore: [],
             //
@@ -139,6 +173,7 @@ export default {
                 cardName: [],
                 cardItems: [],
             },
+            userForm: [],
             showAppraisal: true,
             showCardContent: false,
             showSetCardNum: false,
@@ -146,6 +181,53 @@ export default {
         }
     },
     methods: {
+        //根据id判断是否添加用户框
+        handleUserAdd(e) {
+            console.log(e)
+            console.log(e.target.id)//user0
+            let a = e.target.id.split('r');
+            if(parseInt(a[1]) + 1 == this.userForm.length) {
+                this.userForm.push({account: '', password: '', name: '', type: 2})
+            }
+        },
+        //卡片数量改变
+        handleCardNumChange(e) {
+            let temp = JSON.parse(JSON.stringify(this.districtList));
+
+            
+            console.log(e)
+            temp.map(item => {
+                if(item.id == this.currentDistrictCards.parentId) {
+                    item.children.map(item2 => {
+                        if(item2.id == this.currentDistrictCards.id) {
+                            item2.card.map(item3 => {
+                                if(item3.cardName == e.cardName) {
+                                    item3.cardNum = e.cardNum
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+            console.log(temp)
+            this.districtList = temp;
+        },
+        //区域级联改变
+        handleCascaderChange(e) {
+            console.log(e)
+            this.districtList.map(item => {
+                if(item.id == e[0]) {
+                    item.children.map(item2 => {
+                        if(item2.id == e[1]) {
+                            let a = JSON.stringify(item2)
+                            this.currentDistrictCards = JSON.parse(a)
+                            // this.currentDistrictCards = item2
+                            console.log(this.currentDistrictCards)
+                        }
+                    })
+                }
+            })
+        },
         //切换卡片
         handleCardChange(e) {
             this.currentCard = e;
@@ -167,7 +249,9 @@ export default {
         },
         //下一步填卡片内容
         handleCardContentNext() {
-            
+            //获取地址
+            console.log(this.districtList.length)
+            this.getDistrictList();
             //设置当前卡片为第一张卡片
             this.currentCard.index = 0;
             this.currentCard.name = this.cardName[0];
@@ -263,6 +347,9 @@ export default {
         },
         //下一步设置用户
         handleSetUserNext() {
+            if(this.userForm.length < 1) {
+                this.userForm.push({account: '', password: '', name: '', type: 2})
+            }
             this.showSetCardNum = false;
             this.showSetUser = true;
         },
@@ -281,58 +368,80 @@ export default {
                 let districtList1 = [];
                 let childList = [];
                 let index = 10000;
+                //
+                let card = [];
+                this.cardName.map(item => {
+                    card.push({cardName: item, cardNum: 0});
+                })
+                console.log(card)
                 dataList.map(item => {
                     if(currentCity != item.owenerCityName){
                         if(currentCity != ''){
                             districtList1.push({id: index, title: currentCity, children: childList});
                             childList = [];
                         }
-                        childList.push({id: item.districtId, title: item.districtName, code: item.districtCode, parrentId: index + 1});
+                        childList.push({id: item.districtId, title: item.districtName, code: item.districtCode, parentId: index + 1, card: card});
                         currentCity = item.owenerCityName;
                         index ++;
                     }else {
-                        childList.push({id: item.districtId, title: item.districtName, code: item.districtCode, parrentId: index})
+                        childList.push({id: item.districtId, title: item.districtName, code: item.districtCode, parentId: index, card: card})
                     }
                 })
                 this.districtList = districtList1;
+                console.log(districtList1)
             })
         },
 
 
         //
-        submitAppraisalForm(appraisalForm) {
+        submitAppraisal(appraisalForm) {
             let that = this;
+            //创建测评
             let appraisalNameData = {
                 url: '/api/StartAppraisal',
                 params: {AppraisalName: that.$store.state.entrance}
             }
+            //设置总分
             let totalScoreData = {
                 url: '/api/SetSumScore',
                 params: {score: that.appraisalForm.totalScore, scoreType: that.appraisalForm.scoreType, entrance: that.$store.state.entrance}
             }
-            this.$refs[appraisalForm].validate((valid) => {
-                if(!valid) {
-                    console.log(valid)
-                }else {
-                    generalGet(appraisalNameData).then((res) => {
-                        if(res.msgCode == "OK") {
-                            console.log(res)
-                            return generalGet(totalScoreData);
-                        }
-                    }).then((res2) => {
-                        if(res2.msgCode == "OK") {
-                            console.log(res2)
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                    })
+            //添加卡片
+            let addCard = {
+                url: '/api/SetCardList',
+                params: {}
+            }
+            //添加卡片内容
+            let addCardDetail = {
+                url: '/api/SetCardContent',
+                params: {}
+            }
+
+            generalGet(appraisalNameData).then((res) => {
+                if(res.msgCode == "OK") {
+                    console.log(res)
+                    return generalGet(totalScoreData);
                 }
+            }).then((res2) => {
+                if(res2.msgCode == "OK") {
+                    console.log(res2)
+                }
+                let requestArr = []
+                this.cardName.map((item, index) => {
+                    let number = (index + 1) < 10 ? '0' + (index + 1) : index + 1
+                    addCard.params = {cardName: item, cardItemCount: this.cardItems[index], cardCode: 'K01' + index}
+                    requestArr.push(generalGet(addCard))
+                })
+                return Promise.all(requestArr)
+            }).then(res => {
+                console.log(res)
+                
+            }).catch(err => {
+                console.log(err)
             })
         }
     },
     mounted() {
-        //获取地址
-        this.getDistrictList();
     }
 }
 </script>
@@ -344,5 +453,8 @@ export default {
     }
     .el-icon-arrow-down {
         font-size: 12px;
+    }
+    .flex-box {
+        display: flex;
     }
 </style>
