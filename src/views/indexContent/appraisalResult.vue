@@ -1,20 +1,32 @@
 <template>
     <div>
-        <div class="right-inner-inner-top">
-            <el-button type="primary" @click="handleBack" size="mini">返回</el-button>
-        </div>
-        <el-table :data="appraisalResultTable">
-            <el-table-column label="用户" prop="Uploader"></el-table-column>
-            <el-table-column label="位置" prop="LocalName"></el-table-column>
-            <el-table-column label="区域" prop="Districtname"></el-table-column>
-            <el-table-column label="测评编号" prop="Appraisalcode"></el-table-column>
-            <el-table-column label="卡片名" prop="Cardname"></el-table-column>
-            <el-table-column label="提交时间" prop="writetime"></el-table-column>
-        </el-table>
-        <div>有数据的县</div>
-        <el-table :data="haveScoreDistrictsTable">
-            <el-table-column label="区域" prop="Districtname"></el-table-column>
-            <el-table-column label="行政区划代码" prop="Districtname"></el-table-column>
+        <el-dropdown split-button @command="handleAppraisalDropdownChange">
+            {{typeof(currentAppraisal.appraisalName) == "undefined"?'请选择测评':currentAppraisal.appraisalName}}
+            <el-dropdown-menu slot="dropdown">
+                <div v-for="(item,index) in appraisalDropdown" :key="index">
+                <el-dropdown-item :command="item">{{item.appraisalName}}</el-dropdown-item>
+                </div>
+            </el-dropdown-menu>
+        </el-dropdown>
+
+        <el-dropdown split-button @command="handleCardDropdownChange">
+            {{typeof(currentCard.cardName) == "undefined"?'请选择卡片':currentCard.cardName}}
+            <el-dropdown-menu slot="dropdown">
+                <div v-for="(item,index) in cardDropdown" :key="index">
+                <el-dropdown-item :command="item">{{item.cardName}}</el-dropdown-item>
+                </div>
+            </el-dropdown-menu>
+        </el-dropdown>
+
+        <el-button type="primary" @click="handleAppraisalTotalScore">查看测评总分</el-button>
+
+        <el-table :data="cardDetail" style="width: 100%">
+            <el-table-column prop="item" label="内容" width="180">
+            </el-table-column>
+            <el-table-column prop="beizhu" label="选项" width="180">
+            </el-table-column>
+            <el-table-column prop="score" label="得分/比例" width="100">
+            </el-table-column>
         </el-table>
     </div>
 </template>
@@ -23,36 +35,59 @@
 import {generalGet} from '../../network/general'
 export default {
     name: 'appraisalResult',
+    computed: {
+        appraisalDropdownValue: {
+            get() {this.currentAppraisal != '' ? this.currentAppraisal.appraisalName : 'buzhi'},
+            set() {
+                this.currentAppraisal != '' ? this.currentAppraisal.appraisalName : 'buzhi'
+            }
+        }
+    },
     data() {
         return {
-            appraisalResultTable: [],
-            haveScoreDistrictsTable: []
+            appraisalDropdown: [],
+            currentAppraisal: {},
+            cardDropdown: [],
+            currentCard: {},
+            cardDetail: []
         }
     },
     methods: {
-        loadAppraisalResultTable() {
+        getAppraisal() {
             let that = this;
-            let data = {
-                url: '/api/GetCpResults',
-                AppraisalCode: this.$route.query,
-                districtCode: ''
-            }
-            generalGet(data).then((res) => {
-                console.log(res);
-                that.userAuthorityTable = res.data
-            })
-            generalGet({url: '/api/GetTheDistricts'}).then((res) => {
-                console.log(res);
-                that.haveScoreDistrictsTable = res.data
+            generalGet({url: 'api/GetAllAppraisalCode', params: {entrance: that.$store.state.entrance}}).then(res => {
+                console.log(res)
+                that.appraisalDropdown = res.data
             })
         },
-        //返回
-        handleBack() {
-            this.$router.go(-1);
+        //选择测评触发
+        handleAppraisalDropdownChange(e) {
+            console.log(e)
+            this.currentAppraisal = e;
+            generalGet({url: '/api/ShowCardList', params: {entrance: this.$store.state.entrance, appraisalCode: e.appraisalCode}}).then(res => {
+                console.log(res)
+                this.cardDropdown = res.data;
+            })
+        },
+        //选择卡片触发
+        handleCardDropdownChange(e) {
+            console.log(e)
+            let that = this;
+            this.currentCard = e;
+            generalGet({url: '/api/ShowCardContent', params: {entrance: that.$store.state.entrance, appraisalCode: this.currentAppraisal.appraisalCode}}).then(res => {
+                console.log(res)
+                that.cardDetail = res.data;
+            })
+        },
+        // 查看总分
+        handleAppraisalTotalScore() {
+            generalGet({url: '/api/GetCpResults', params: {appraisalCode: this.currentAppraisal.appraisalCode}}).then(res => {
+                console.log(res)
+            })
         }
     },
     mounted() {
-        this.loadAppraisalResultTable();
+        this.getAppraisal()
     },
 }
 </script>

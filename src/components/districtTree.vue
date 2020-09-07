@@ -42,11 +42,14 @@ export default {
                 let childList = [];
                 let index = 10000;
                 dataList.map(item => {
-                    this.currentUser.districtName.split(',').map(item2 => {
-                        if(item2 == item.districtName) {
-                            this.defaultCheckedKeys.push(item.districtId)
-                        }
-                    })
+                    if(this.currentUser.districtName){
+                        //已经选了的勾选上
+                        this.currentUser.districtName.split(',').map(item2 => {
+                            if(item2 == item.districtName) {
+                                this.defaultCheckedKeys.push(item.districtId)
+                            }
+                        })
+                    }
                     if(currentCity != item.owenerCityName){
                         if(currentCity != ''){
                             districtList.push({id: index, title: currentCity, children: childList});

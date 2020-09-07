@@ -2,6 +2,7 @@
     <div class="">
         <div v-if="$store.state.loginInfo.type!=2" class="right-inner-inner-top">
             <el-button round type="primary" size="small" @click="addAppraisalDialog=true">添加测评</el-button>
+            <el-button round type="primary" size="small" @click="addQuestionnaireDialog=true">添加问卷</el-button>
         </div>
         <el-table :data="appraisalTable" highlight-current-row height="82vh" border>
             <el-table-column label="测评编号" prop="appraisalCode"></el-table-column>
@@ -35,6 +36,11 @@
         <el-dialog :visible.sync="addAppraisalDialog" width="40%" modal title="添加测评" @closed="handleCloseAddAppraisal">
             <addAppraisal ref="addAppraisal" />
         </el-dialog>
+
+        <el-dialog :visible.sync="addQuestionnaireDialog" width="40%" modal title="添加问卷">
+            <addQuestionnaire/>
+        </el-dialog>
+
         <el-dialog :visible.sync="addCardDialog" width="40%" modal title="添加卡片">
             <addCard :currentAppraisalCode="currentAppraisalCode" />
         </el-dialog>
@@ -46,16 +52,19 @@ import {generalGet, generalPost} from '../../network/general'
 
 import addAppraisal from '../../views/indexContent/addAppraisal'
 import addCard from '../../views/indexContent/addCard'
+import addQuestionnaire from './addQuestionnaire'
 export default {
     name: 'appraisal',
     components: {
         addAppraisal,
-        addCard
+        addCard,
+        addQuestionnaire
     },
     data() {
         return {
             appraisalTable: [],
             addAppraisalDialog: false,
+            addQuestionnaireDialog: false,
             addCardDialog: false,
             currentAppraisalCode: '1',
         }

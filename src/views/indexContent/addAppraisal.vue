@@ -181,7 +181,7 @@ export default {
         }
     },
     methods: {
-        //根据id判断是否添加用户框
+        //根据id判断是否添加用户text框
         handleUserAdd(e) {
             console.log(e)
             console.log(e.target.id)//user0
@@ -202,7 +202,7 @@ export default {
                         if(item2.id == this.currentDistrictCards.id) {
                             item2.card.map(item3 => {
                                 if(item3.cardName == e.cardName) {
-                                    item3.cardNum = e.cardNum
+                                    item3.cardNum = e.cardNum;
                                 }
                             })
                         }
@@ -258,7 +258,8 @@ export default {
             //将卡片名和卡片选项空值放入变量
             let cardContainer = [];
             this.cardName.map((item, index) => {
-                cardContainer.push({name: item, items: []})
+                let xuhao = (index + 1) < 10 ? '0' + (index + 1) : (index + 1);
+                cardContainer.push({name: item, items: [], cardCode: 'K01' + xuhao})
             })
             this.cardItems.map((item, index) => {
                 for(let i = 0; i < item; i++) {
@@ -347,6 +348,7 @@ export default {
         },
         //下一步设置用户
         handleSetUserNext() {
+            //初始用户
             if(this.userForm.length < 1) {
                 this.userForm.push({account: '', password: '', name: '', type: 2})
             }
@@ -370,8 +372,8 @@ export default {
                 let index = 10000;
                 //
                 let card = [];
-                this.cardName.map(item => {
-                    card.push({cardName: item, cardNum: 0});
+                this.cardName.map((item, index) => {
+                    card.push({cardName: item, cardNum: 0, cardCode: (index + 1) > 9 ? 'K01' + (index +1) : 'K01' + '0' + (index + 1)});
                 })
                 console.log(card)
                 dataList.map(item => {
@@ -393,7 +395,7 @@ export default {
         },
 
 
-        //
+        //提交
         submitAppraisal(appraisalForm) {
             let that = this;
             //创建测评
@@ -416,27 +418,79 @@ export default {
                 url: '/api/SetCardContent',
                 params: {}
             }
-
-            generalGet(appraisalNameData).then((res) => {
+            //给区域分配卡片
+            let distributeCard = {
+                url: '/api/SetCardCount',
+                params: {}
+            }
+            //分配用户
+            let addUser = {
+                url: '/api/SetUser',
+                params: {}
+            }
+            
+            //添加测评
+            let a = generalGet(appraisalNameData).then((res) => {
                 if(res.msgCode == "OK") {
                     console.log(res)
+                    //设置总分
                     return generalGet(totalScoreData);
                 }
             }).then((res2) => {
                 if(res2.msgCode == "OK") {
                     console.log(res2)
                 }
-                let requestArr = []
-                this.cardName.map((item, index) => {
+                let requestArr = [];
+                this.cardArr.map((item, index) => {
                     let number = (index + 1) < 10 ? '0' + (index + 1) : index + 1
-                    addCard.params = {cardName: item, cardItemCount: this.cardItems[index], cardCode: 'K01' + index}
+                    addCard.params = {cardName: item.name, cardItemCount: item.items.length, cardCode: item.cardCode, entrance: this.$store.state.entrance}
                     requestArr.push(generalGet(addCard))
                 })
+                console.log(1)
+                //添加卡片
+                return Promise.all(requestArr)
+            })
+            .then(res => {
+                console.log(res)
+                let requestArr = [];
+                let a = this.cardArr.map(item => {
+                    item.items.map(item2 => {
+                        addCardDetail.params = {cardCode: item.cardCode, item: item2.content, beizhu: item2.mark,cardName: item.name, entrance: this.$store.state.entrance}
+                        requestArr.push(generalGet(addCardDetail));
+                    })
+                })
+                //添加卡片内容
                 return Promise.all(requestArr)
             }).then(res => {
                 console.log(res)
-                
-            }).catch(err => {
+                let requestArr = [];
+                this.districtList.map(item => {
+                    item.children.map(item2 => {
+                        item2.card.map(item3 => {
+                            if(item3.cardNum != '') {
+                                distributeCard.params = {
+                                    districtCode: item2.code, districtName: item2.title, cardCode: item3.cardCode, cardScore: null, cardMaxCount: item3.cardNum, entrance: this.$store.state.entrance
+                                }
+                                requestArr.push(generalGet(distributeCard))
+                            }
+                        })
+                    })
+                })
+                //为地区分配卡片
+                return Promise.all(requestArr);
+            }).then(res => {
+                console.log(res)
+                let requestArr = [];
+                for(let i = 0; i < this.userForm.length - 1; i ++) {
+                    addUser.params = {Account: this.userForm[i].account, Password: this.userForm[i].password, RealName: this.userForm[i].name, Type: this.userForm[i].type, entrance: this.$store.state.entrance};
+                    requestArr.push(generalGet(addUser))
+                }
+                //添加用户
+                return Promise.all(requestArr)
+            }).then(res => {
+                console.log(res)
+            })
+            .catch(err => {
                 console.log(err)
             })
         }
